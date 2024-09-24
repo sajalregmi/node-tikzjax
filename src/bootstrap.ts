@@ -5,6 +5,8 @@ import { IFs, Volume, createFsFromVolume } from 'memfs';
 import { join } from 'path';
 import { Readable } from 'stream';
 import * as library from './library';
+import { flushConsoleBuffer } from './library'; // Adjust the path if necessary
+
 
 declare module 'tar-fs' {
   interface ExtractOptions {
@@ -95,12 +97,20 @@ export type TeXOptions = {
  * @returns The generated DVI file.
  */
 export async function tex(input: string, options: TeXOptions = {}) {
+
+  let capturedLogs: any[] = [];
+
   // Set up the tex input file.
   const preamble = getTexPreamble(options);
   input = preamble + input;
 
   if (options.showConsole) {
     library.setShowConsole();
+
+        // Define the log callback to capture logs
+        library.setLogCallback((logLine: any) => {
+          capturedLogs.push(logLine);
+        });
 
     console.log('TikZJax: Rendering input:');
     console.log(input);
@@ -132,12 +142,25 @@ export async function tex(input: string, options: TeXOptions = {}) {
   try {
     const dvi = Buffer.from(library.readFileSync('input.dvi'));
 
+      // **Flush any remaining logs**
+      flushConsoleBuffer();
+
     // Clean up the library for the next run.
     library.deleteEverything();
 
     return dvi;
   } catch (e) {
+      // **Flush any remaining logs**
+      flushConsoleBuffer();
+
     library.deleteEverything();
+
+        // If logs were captured, include them in the error
+        if (options.showConsole && capturedLogs.length > 0) {
+          const detailedError = `TeX engine render failed with the following logs:\n${capturedLogs.join('\n')}`;
+          throw new Error(detailedError);
+        }
+
     throw new Error('TeX engine render failed. Set `options.showConsole` to `true` to see logs.');
   }
 }

@@ -19,6 +19,13 @@ let wasmExports = null;
 let view = null;
 let fileLoader = null;
 var finished = null;
+let logCallback = null; // Function to handle log messages
+let capturedLogs = [];   // Buffer to store log messages
+
+export function setLogCallback(callback) {
+	logCallback = callback;
+  }
+  
 
 export var pages = 1100;
 
@@ -185,15 +192,33 @@ function writeToConsole(x) {
 	if (!showConsole) return;
 	consoleBuffer += x;
 	if (consoleBuffer.indexOf("\n") >= 0) {
-		let lines = consoleBuffer.split("\n");
-		consoleBuffer = lines.pop();
-		for (let line of lines) {
-			// PATCHED:
-			// if (line.length) postMessage(line);
-			if (line.length) console.log(line);
+	  let lines = consoleBuffer.split("\n");
+	  consoleBuffer = lines.pop();
+	  for (let line of lines) {
+		if (line.length) {
+		  if (typeof logCallback === 'function') {
+			logCallback(line); // Capture the log message
+		  } else {
+			console.log(line); // Fallback to console.log
+		  }
 		}
+	  }
 	}
-}
+  }
+
+  // **Add this function**
+export function flushConsoleBuffer() {
+	if (consoleBuffer.length > 0) {
+	  let line = consoleBuffer;
+	  consoleBuffer = '';
+	  if (typeof logCallback === 'function') {
+		logCallback(line);
+	  } else {
+		console.log(line);
+	  }
+	}
+  }
+  
 
 export function setShowConsole() {
 	showConsole = true;

@@ -4,11 +4,21 @@ A port of [TikZJax](https://tikzjax.com) runs on pure Node.js and WebAssembly.
 
 Node-TikZJax lets you render LaTeX and TikZ diagrams to SVG images without the need to install LaTeX toolchain to the environment. You can render graphs, figures, circuits, chemical diagrams, commutative diagrams, and more.
 
+## License
+
+This project is a fork of [prinsss/node-tikzjax](https://github.com/prinsss/node-tikzjax) and is licensed under the [LaTeX Project Public License v1.3c](https://github.com/kisonecat/tikzjax/blob/master/LICENSE.md).
+
+## Updated Usecase
+This project updates the original [prinsss/node-tikzjax](https://github.com/prinsss/node-tikzjax) to return detailed error message instead of the generic one in case of conversion failure.
+
+
 ## Installation
 
 ```bash
-npm install node-tikzjax
+npm install @sajal/node-tikzjax
 ```
+
+
 
 ## Examples
 
