@@ -1,5 +1,5 @@
 {
-  "name": "@sajal/node-tikzjax",
+  "name": "@sajalregmi/node-tikzjax",
   "description": "A port of TikZJax runs on pure Node.js and WebAssembly. Specific use case to return the complete error message",
   "version": "1.0.3",
   "author": "prin <hi@prin.studio>",

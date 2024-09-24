@@ -1,6 +1,6 @@
-# Node-TikZJax
+# @sajal/node-tikzjax
 
-A port of [TikZJax](https://tikzjax.com) runs on pure Node.js and WebAssembly.
+A port of [prinsss/node-tikzjax](https://tikzjax.com) runs on pure Node.js and WebAssembly.
 
 Node-TikZJax lets you render LaTeX and TikZ diagrams to SVG images without the need to install LaTeX toolchain to the environment. You can render graphs, figures, circuits, chemical diagrams, commutative diagrams, and more.
 
